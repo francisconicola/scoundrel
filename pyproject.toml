@@ -1,0 +1,10 @@
+[project]
+name = "scoundrel"
+version = "0.1.0"
+description = "A rogue-like card game"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "readchar>=4.2.1",
+    "rich>=14.0.0",
+]
