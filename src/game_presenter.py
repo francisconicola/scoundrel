@@ -17,23 +17,21 @@ class GamePresenter:
         self.game = GameState()
 
     def run(self) -> None:
-        console.print("─── Game start!", style="green bold")
+        console.system_print("Game start!")
         self.game.go_to_next_room()
         current_room = None
         while self.game.game_result == None:
             if current_room != self.game.room_count:
-                console.print(
-                    f"─── Entering room {self.game.room_count}", style="green bold"
-                )
+                console.system_print(f"Entering room {self.game.room_count}")
                 current_room = self.game.room_count
             action = self.prompt_user_action()
             self.game.apply_action(action)
         if self.game.game_result == GameResult.WIN:
-            console.print("─── You win! :3", style="green bold")
+            console.system_print("You win! :3")
             console.print(f"Rooms visited: [b]{self.game.room_count}[/b]")
             console.print(f"Remaining health: [b]{self.game.health}[/b]")
         else:
-            console.print("─── You lose...", style="green bold")
+            console.system_print("You lose...")
             console.print("Better luck next time ;)")
         console.print("Press any key to restart...\n", style="grey42")
         readchar.readchar()

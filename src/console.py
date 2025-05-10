@@ -27,4 +27,14 @@ _scoundrel_theme = Theme(
 
 highlighter = ScoundrelHighlighter()
 
-console = Console(highlighter=highlighter, theme=_scoundrel_theme)
+
+class ScoundrelConsole(Console):
+    def __init__(self):
+        super().__init__(highlighter=highlighter, theme=_scoundrel_theme)
+
+    def system_print(self, message: str):
+        """Print to the console, prefixed with a system indicator and predefined style."""
+        self.print("─── " + message, style="green bold")
+
+
+console = ScoundrelConsole()
