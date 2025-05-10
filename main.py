@@ -1,15 +1,12 @@
 from src.console import console
-from src.game_presenter import GamePresenter
-from src.title import print_title
+from src.game_menu import GameMenu
 
 
 def main():
     try:
-        while True:
-            print_title()
-            GamePresenter().run()
+        GameMenu().run()
     except KeyboardInterrupt:
-        console.print("Shutting down...")
+        console.system_print("Bye!")
 
 
 if __name__ == "__main__":

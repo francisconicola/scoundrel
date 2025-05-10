@@ -10,6 +10,7 @@ from src.action import Action, AttackBarehand, AttackWeapon, Equip, Heal, SkipRo
 from src.cards import Suit
 from src.console import console, highlighter
 from src.game_state import GameResult, GameState
+from src.input_selector import select_input
 
 
 class GamePresenter:
@@ -17,30 +18,35 @@ class GamePresenter:
         self.game = GameState()
 
     def run(self) -> None:
-        console.system_print("Game start!")
-        self.game.go_to_next_room()
-        current_room = None
-        while self.game.game_result == None:
-            if current_room != self.game.room_count:
-                console.system_print(f"Entering room {self.game.room_count}")
-                current_room = self.game.room_count
-            action = self.prompt_user_action()
-            self.game.apply_action(action)
-        if self.game.game_result == GameResult.WIN:
-            console.system_print("You win! :3")
-            console.print(f"Rooms visited: [b]{self.game.room_count}[/b]")
-            console.print(f"Remaining health: [b]{self.game.health}[/b]")
-        else:
-            console.system_print("You lose...")
-            console.print("Better luck next time ;)")
-        console.print("Press any key to restart...\n", style="grey42")
-        readchar.readchar()
+        try:
+            console.system_print("Game start!")
+            self.game.go_to_next_room()
+            current_room = None
+            while self.game.game_result == None:
+                if current_room != self.game.room_count:
+                    console.system_print(f"Entering room {self.game.room_count}")
+                    current_room = self.game.room_count
+                action = self.prompt_user_action()
+                self.game.apply_action(action)
+            if self.game.game_result == GameResult.WIN:
+                console.system_print("You win! :3")
+                console.print(f"Rooms visited: [b]{self.game.room_count}[/b]")
+                console.print(f"Remaining health: [b]{self.game.health}[/b]")
+            else:
+                console.system_print("You lose...")
+                console.print("Better luck next time ;)")
+            with Live(
+                Text("Press any key to continue...\n", style="scoundrel.placeholder"),
+                console=console,
+                auto_refresh=False,
+                transient=True,
+            ):
+                readchar.readchar()
+        except KeyboardInterrupt:
+            pass
 
     def prompt_user_action(self) -> Action:
-        with Live(
-            auto_refresh=False,
-            console=console,
-        ) as live:
+        with Live(auto_refresh=False, console=console) as live:
             action: Optional[Action] = None
             main_selection = self.choose_main_selection(live)
             if main_selection == len(self.game.room):
@@ -54,8 +60,7 @@ class GamePresenter:
                         action = Equip(selected_card)
                     case Suit.CLUBS | Suit.SPADES:
                         if (
-                            self.game.equipped_weapon == None
-                            or not self.game.can_attack_with_weapon(selected_card)
+                            not self.game.can_attack_with_weapon(selected_card)
                             or self.choose_attack(live, main_selection) == "barehand"
                         ):
                             action = AttackBarehand(selected_card)
@@ -65,51 +70,33 @@ class GamePresenter:
             return action
 
     def choose_main_selection(self, live: Live) -> int:
-        main_selection = 0
-        live.update(self.build_room(main_selection=0), refresh=True)
-        while True:
-            char = readchar.readkey()
-            option_count = len(self.game.room) + int(self.game.can_skip_room())
-            if char == readchar.key.RIGHT:
-                main_selection = (main_selection + 1) % option_count
-            elif char == readchar.key.LEFT:
-                main_selection = (main_selection - 1) % option_count
-            elif char == readchar.key.ENTER:
-                live.update(self.build_room(), refresh=True)
-                break
-            live.update(
-                self.build_room(main_selection=main_selection),
-                refresh=True,
-            )
+
+        def refresh_main_selection(selection: int) -> RenderableType:
+            return self.build_room(main_selection=selection)
+
+        main_selection = select_input(
+            option_count=len(self.game.room) + int(self.game.can_skip_room()),
+            live=live,
+            refresher=refresh_main_selection,
+        )
+        live.update(self.build_room(), refresh=True)
         return main_selection
 
     def choose_attack(
         self, live: Live, main_selection: int
     ) -> Literal["barehand", "weapon"]:
-        attack_selection = 0
-        live.update(
-            self.build_room(
-                main_selection=main_selection,
-                attack_selection=attack_selection,
-            ),
-            refresh=True,
-        )
-        while True:
-            char = readchar.readkey()
-            if char == readchar.key.RIGHT:
-                attack_selection = (attack_selection + 1) % 2
-            elif char == readchar.key.LEFT:
-                attack_selection = (attack_selection - 1) % 2
-            elif char == readchar.key.ENTER:
-                live.update(self.build_room(), refresh=True)
-                break
-            live.update(
-                self.build_room(
-                    main_selection=main_selection,
-                    attack_selection=attack_selection,
-                ),
-                refresh=True,
+
+        def refresh_attack_selection(selection: int) -> RenderableType:
+            return self.build_room(
+                main_selection=main_selection, attack_selection=selection
             )
+
+        attack_selection = select_input(
+            option_count=2,
+            live=live,
+            refresher=refresh_attack_selection,
+        )
+        live.update(self.build_room(), refresh=True)
         return "barehand" if bool(attack_selection) else "weapon"
 
     def build_room(
@@ -122,7 +109,10 @@ class GamePresenter:
         panel_width = 44
         panel_padding = 1
         main_options = [Text(str(card)) for card in self.game.room] + [
-            Text("\u21a9Skip", style="grey30" if not self.game.can_skip_room() else "")
+            Text(
+                "\u21a9Skip",
+                style="scoundrel.placeholder" if not self.game.can_skip_room() else "",
+            )
         ]
         if main_selection != None:
             main_options[main_selection].stylize("u")
