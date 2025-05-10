@@ -4,6 +4,7 @@ from typing import Optional
 from src.action import Action, AttackBarehand, AttackWeapon, Equip, Heal, SkipRoom
 from src.cards import Card
 from src.deck import Deck
+from src.shuffler import ControlledDeckShuffler
 
 
 class GameResult(Enum):
@@ -16,7 +17,7 @@ class GameState:
     ROOM_SIZE = 4
 
     def __init__(self):
-        self.deck = Deck()
+        self.deck = Deck(ControlledDeckShuffler())
         self.health = GameState.MAX_HEALTH
         self.equipped_weapon: Optional[Card] = None
         self.weapon_last_slain: Optional[Card] = None
