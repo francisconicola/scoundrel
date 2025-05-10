@@ -150,7 +150,7 @@ class GamePresenter:
         return Panel(
             highlighter(Text("\n").join(content)),
             title=f"[yellow]Room [italic]#{self.game.room_count:02}[/italic][/yellow] "
-            + f"| [green]HP:{self.game.health:3}[/green]",
+            + f"| [yellow]HP:[italic]{self.game.health:3}[/italic][/yellow]",
             title_align="left",
             subtitle=f"[yellow]Remaining: [italic]{self.game.remaining:2}[/italic][/yellow]",
             subtitle_align="right",
