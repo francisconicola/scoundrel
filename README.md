@@ -9,6 +9,8 @@
 
 Hi! I made a dungeon crawler solo card game in Python for the terminal. It's fun, you should play it.
 
+![A room in a dangerous text-based dungeon](picture.png)
+
 Credit to **Zach Gage** and **Kurt Bieg** for the [original rules](http://stfj.net/art/2011/Scoundrel.pdf).
 
 - You begin the game with 20 health points.
