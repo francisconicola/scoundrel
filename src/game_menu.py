@@ -101,6 +101,7 @@ class GameMenu:
 - [scoundrel.diamond]Diamonds[/scoundrel.diamond] are [scoundrel.diamond]weapons[/scoundrel.diamond] — equip them to reduce damage from [scoundrel.spade]mons[/scoundrel.spade][scoundrel.club]ters[/scoundrel.club].
 - [scoundrel.heart]Hearts[/scoundrel.heart] are [scoundrel.heart]potions[/scoundrel.heart] — use them to heal based on its [yellow]rank[/yellow].
 - You may only carry one [scoundrel.diamond]weapon[/scoundrel.diamond] at a time; new ones replace the old.
+- Equipped [scoundrel.diamond]weapons[/scoundrel.diamond] reduce damage taken when attacking; you only take the difference in [yellow]rank[/yellow].
 - After defeating a [scoundrel.spade]mons[/scoundrel.spade][scoundrel.club]ter[/scoundrel.club] with a [scoundrel.diamond]weapon[/scoundrel.diamond], it can only be used again on a [scoundrel.spade]mons[/scoundrel.spade][scoundrel.club]ter[/scoundrel.club] with equal or lower [yellow]rank[/yellow].
 - You may always choose to fight [scoundrel.diamond]barehanded[/scoundrel.diamond], taking full [scoundrel.spade]mons[/scoundrel.spade][scoundrel.club]ter[/scoundrel.club] damage.
 - You may [yellow]skip[/yellow] a [yellow]room[/yellow]; all [yellow]4[/yellow] cards go to the bottom of the deck.

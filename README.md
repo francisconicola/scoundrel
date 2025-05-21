@@ -19,6 +19,7 @@ Credit to **Zach Gage** and **Kurt Bieg** for the [original rules](http://stfj.n
 - Diamonds are weapons — equip them to reduce damage from monsters.
 - Hearts are potions — use them to heal based on its rank.
 - You may only carry one weapon at a time; new ones replace the old.
+- Equipped weapons reduce damage taken when attacking; you only take the difference in rank.
 - After defeating a monster with a weapon, it can only be used again on a monster with equal or lower rank.
 - You may always choose to fight barehanded, taking full monster damage.
 - You may skip a room; all 4 cards go to the bottom of the deck.
